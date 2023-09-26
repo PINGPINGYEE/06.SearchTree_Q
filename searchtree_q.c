@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// ÀÌÁø Å½»ö Æ®¸® ³ëµå Á¤ÀÇ
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ ë…¸ë“œ ì •ì˜
 typedef struct TreeNode {
     int data;
     struct TreeNode* left, *right;
 } TreeNode;
 
-// ÀÌÁø Å½»ö Æ®¸® »ğÀÔ ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ ì‚½ì… í•¨ìˆ˜
 TreeNode* insert(TreeNode* root, int data) {
     if (root == NULL) {
         TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
@@ -26,7 +26,7 @@ TreeNode* insert(TreeNode* root, int data) {
     return root;
 }
 
-// ÀÌÁø Å½»ö Æ®¸®¿¡¼­ ³ëµå »èÁ¦ ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì—ì„œ ë…¸ë“œ ì‚­ì œ í•¨ìˆ˜
 TreeNode* delete(TreeNode* root, int data) {
     if (root == NULL) {
         return root;
@@ -39,7 +39,7 @@ TreeNode* delete(TreeNode* root, int data) {
         root->right = delete(root->right, data);
     }
     else {
-        // »èÁ¦ÇÒ ³ëµå¸¦ Ã£¾ÒÀ» ¶§
+        // ì‚­ì œí•  ë…¸ë“œë¥¼ ì°¾ì•˜ì„ ë•Œ
         if (root->left == NULL) {
             TreeNode* temp = root->right;
             free(root);
@@ -51,7 +51,7 @@ TreeNode* delete(TreeNode* root, int data) {
             return temp;
         }
 
-        // µÎ ÀÚ½Ä ³ëµå ¸ğµÎ ÀÖ´Â °æ¿ì
+        // ë‘ ìì‹ ë…¸ë“œ ëª¨ë‘ ìˆëŠ” ê²½ìš°
         TreeNode* temp = root->right;
         while (temp->left != NULL) {
             temp = temp->left;
@@ -64,7 +64,7 @@ TreeNode* delete(TreeNode* root, int data) {
 
 
 
-// ÀÌÁø Å½»ö Æ®¸®¿¡¼­ ³ëµå °Ë»ö ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ì—ì„œ ë…¸ë“œ ê²€ìƒ‰ í•¨ìˆ˜
 TreeNode* searchIterative(TreeNode* root, int data) {
     while (root != NULL && root->data != data) {
         if (data < root->data) {
@@ -78,7 +78,7 @@ TreeNode* searchIterative(TreeNode* root, int data) {
 }
 
 
-// ÀÌÁø Å½»ö Æ®¸® ÁßÀ§ ¼øÈ¸ ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ ì¤‘ìœ„ ìˆœíšŒ í•¨ìˆ˜
 void inorder(TreeNode* root) {
     if (root != NULL) {
         inorder(root->left);
@@ -87,7 +87,7 @@ void inorder(TreeNode* root) {
     }
 }
 
-// ÀÌÁø Å½»ö Æ®¸® ³ëµå ¼ö¸¦ °è»êÇÏ´Â ÇÔ¼ö
+// ì´ì§„ íƒìƒ‰ íŠ¸ë¦¬ ë…¸ë“œ ìˆ˜ë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
 int countNodes(TreeNode* root) {
     if (root == NULL) {
         return 0;
@@ -102,7 +102,7 @@ TreeNode* createNode(int data) {
     return newNode;
 }
 
-// ÀÌÁø Æ®¸® ³ëµå »ğÀÔ (¹İº¹Àû ¹æ¹ı)
+// ì´ì§„ íŠ¸ë¦¬ ë…¸ë“œ ì‚½ì… (ë°˜ë³µì  ë°©ë²•)
 TreeNode* insertIterative(TreeNode* root, int data) {
     TreeNode* newNode = createNode(data);
 
@@ -133,7 +133,7 @@ TreeNode* insertIterative(TreeNode* root, int data) {
     return root;
 }
 
-// ÀÌÁø Æ®¸® ³ëµå »èÁ¦ (¹İº¹Àû ¹æ¹ı)
+// ì´ì§„ íŠ¸ë¦¬ ë…¸ë“œ ì‚­ì œ (ë°˜ë³µì  ë°©ë²•)
 TreeNode* deleteIterative(TreeNode* root, int data) {
     if (root == NULL) {
         return root;
@@ -153,15 +153,15 @@ TreeNode* deleteIterative(TreeNode* root, int data) {
     }
 
     if (current == NULL) {
-        // »èÁ¦ÇÒ ³ëµå¸¦ Ã£Áö ¸øÇÑ °æ¿ì
+        // ì‚­ì œí•  ë…¸ë“œë¥¼ ì°¾ì§€ ëª»í•œ ê²½ìš°
         return root;
     }
 
     if (current->left == NULL && current->right == NULL) {
-        // »èÁ¦ÇÒ ³ëµå°¡ ¸®ÇÁ ³ëµåÀÎ °æ¿ì
+        // ì‚­ì œí•  ë…¸ë“œê°€ ë¦¬í”„ ë…¸ë“œì¸ ê²½ìš°
         if (parent == NULL) {
             free(current);
-            return NULL; // ·çÆ® ³ëµå »èÁ¦
+            return NULL; // ë£¨íŠ¸ ë…¸ë“œ ì‚­ì œ
         }
 
         if (current == parent->left) {
@@ -174,7 +174,7 @@ TreeNode* deleteIterative(TreeNode* root, int data) {
     }
 
     else if (current->left != NULL && current->right != NULL) {
-        // »èÁ¦ÇÒ ³ëµå°¡ µÎ °³ÀÇ ÀÚ½Ä ³ëµå¸¦ °¡Áø °æ¿ì
+        // ì‚­ì œí•  ë…¸ë“œê°€ ë‘ ê°œì˜ ìì‹ ë…¸ë“œë¥¼ ê°€ì§„ ê²½ìš°
         TreeNode* successor = current->right;
         TreeNode* successorParent = current;
 
@@ -193,11 +193,11 @@ TreeNode* deleteIterative(TreeNode* root, int data) {
         free(successor);
     }
     else {
-        // »èÁ¦ÇÒ ³ëµå°¡ ÇÏ³ªÀÇ ÀÚ½Ä ³ëµå¸¸ °¡Áø °æ¿ì
+        // ì‚­ì œí•  ë…¸ë“œê°€ í•˜ë‚˜ì˜ ìì‹ ë…¸ë“œë§Œ ê°€ì§„ ê²½ìš°
         TreeNode* child = (current->left != NULL) ? current->left : current->right;
 
         if (parent == NULL) {
-            return child; // ·çÆ® ³ëµå »èÁ¦
+            return child; // ë£¨íŠ¸ ë…¸ë“œ ì‚­ì œ
         }
 
         if (current == parent->left) {
@@ -212,83 +212,100 @@ TreeNode* deleteIterative(TreeNode* root, int data) {
     return root;
 }
 
-TreeNode n12 = { 42, NULL, NULL };
-TreeNode n13 = { 62, NULL, NULL };
-TreeNode n14 = { 64, NULL, NULL };
-TreeNode n7 = { 25, NULL, NULL };
-TreeNode n8 = { 46, &n12, NULL };
-TreeNode n9 = { 55, NULL, NULL };
-TreeNode n10 = { 63, &n13, &n14 };
-TreeNode n11 = { 70, NULL, NULL };
-TreeNode n4 = { 16, NULL, &n7 };
-TreeNode n5 = { 53, &n8, &n9 };
-TreeNode n6 = { 65, &n10, &n11 };
-TreeNode n2 = { 41, &n4, &n5 };
-TreeNode n3 = { 74, &n6, NULL };
-TreeNode n1 = { 60, &n2, &n3 };
-TreeNode* root = &n1;
-
 int main() {
     char choice;
     int data;
-    printf("s : °Ë»ö \ni : ³ëµå Ãß°¡\nd : ³ëµå »èÁ¦\nt : ÁßÀ§ ¼øÈ¸\nI : ³ëµå Ãß°¡(¹İº¹)\nD : ³ëµå »èÁ¦(¹İº¹)\nc : Á¾·á\n");
+
+    TreeNode* n12 = createNode(42);
+    TreeNode* n13 = createNode(62);
+    TreeNode* n14 = createNode(64);
+    TreeNode* n7 = createNode(25);
+    TreeNode* n8 = createNode(46);
+    TreeNode* n9 = createNode(55);
+    TreeNode* n10 = createNode(63);
+    TreeNode* n11 = createNode(70);
+    TreeNode* n4 = createNode(16);
+    TreeNode* n5 = createNode(53);
+    TreeNode* n6 = createNode(65);
+    TreeNode* n2 = createNode(41);
+    TreeNode* n3 = createNode(74);
+    TreeNode* n1 = createNode(60);
+
+    // ë…¸ë“œë“¤ì„ ì—°ê²°
+    n8->left = n12;
+    n5->left = n8;
+    n5->right = n9;
+    n10->left = n13;
+    n10->right = n14;
+    n6->left = n10;
+    n6->right = n11;
+    n2->left = n4;
+    n2->right = n5;
+    n3->left = n6;
+    n1->left = n2;
+    n1->right = n3;
+
+    // ë£¨íŠ¸ ë…¸ë“œ ì„¤ì •
+    TreeNode* root = n1;
+
+    printf("s : ê²€ìƒ‰ \ni : ë…¸ë“œ ì¶”ê°€\nd : ë…¸ë“œ ì‚­ì œ\nt : ì¤‘ìœ„ ìˆœíšŒ\nI : ë…¸ë“œ ì¶”ê°€(ë°˜ë³µ)\nD : ë…¸ë“œ ì‚­ì œ(ë°˜ë³µ)\nc : ì¢…ë£Œ\n");
 
     while (1) {
-        printf("¸Ş´º¸¦ ¼±ÅÃÇÏ¼¼¿ä (s/i/d/t/I/D/q): ");
+        printf("ë©”ë‰´ë¥¼ ì„ íƒí•˜ì„¸ìš” (s/i/d/t/I/D/q): ");
         scanf_s(" %c", &choice);
         switch (choice) {
         case 's':
-            printf("°Ë»öÇÒ °ªÀ» ÀÔ·ÂÇÏ¼¼¿ä: ");
+            printf("ê²€ìƒ‰í•  ê°’ì„ ì…ë ¥í•˜ì„¸ìš”: ");
             scanf_s("%d", &data);
             if (searchIterative(root, data) != NULL) {
-                printf("³ëµå°¡ Á¸ÀçÇÕ´Ï´Ù.\n");
+                printf("ë…¸ë“œê°€ ì¡´ì¬í•©ë‹ˆë‹¤.\n");
             }
             else {
-                printf("³ëµå°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.\n");
+                printf("ë…¸ë“œê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
             }
             inorder(root);
             break;
         case 'i':
-            printf("»ğÀÔÇÒ °ªÀ» ÀÔ·ÂÇÏ¼¼¿ä: ");
+            printf("ì‚½ì…í•  ê°’ì„ ì…ë ¥í•˜ì„¸ìš”: ");
             scanf_s("%d", &data);
             root = insert(root, data);
-            printf("»ğÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n");
+            printf("ì‚½ì…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\n");
             inorder(root);
             break;
         case 'd':
-            printf("»èÁ¦ÇÒ °ªÀ» ÀÔ·ÂÇÏ¼¼¿ä: ");
+            printf("ì‚­ì œí•  ê°’ì„ ì…ë ¥í•˜ì„¸ìš”: ");
             scanf_s("%d", &data);
             root = delete(root, data);
-            printf("»èÁ¦°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n");
+            printf("ì‚­ì œê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\n");
             inorder(root);
             break;
         case 't':
-            printf("ÁßÀ§ ¼øÈ¸ °á°ú: ");
+            printf("ì¤‘ìœ„ ìˆœíšŒ ê²°ê³¼: ");
             inorder(root);
             printf("\n");
             break;
         case 'I':
-            printf("¹İº¹Àû ¹æ¹ıÀ¸·Î »ğÀÔÇÒ °ªÀ» ÀÔ·ÂÇÏ¼¼¿ä: ");
+            printf("ë°˜ë³µì  ë°©ë²•ìœ¼ë¡œ ì‚½ì…í•  ê°’ì„ ì…ë ¥í•˜ì„¸ìš”: ");
             scanf_s("%d", &data);
             root = insertIterative(root, data);
-            printf("»ğÀÔÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n");
+            printf("ì‚½ì…ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\n");
             inorder(root);
             break;
         case 'D':
-            printf("¹İº¹Àû ¹æ¹ıÀ¸·Î »èÁ¦ÇÒ °ªÀ» ÀÔ·ÂÇÏ¼¼¿ä: ");
+            printf("ë°˜ë³µì  ë°©ë²•ìœ¼ë¡œ ì‚­ì œí•  ê°’ì„ ì…ë ¥í•˜ì„¸ìš”: ");
             scanf_s("%d", &data);
             root = deleteIterative(root, data);
-            printf("»èÁ¦°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n");
+            printf("ì‚­ì œê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\n");
             inorder(root);
             break;
         case 'q':
-            printf("ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù.\n");
+            printf("í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.\n");
             return 0;
         default:
-            printf("Àß¸øµÈ ¸Ş´ºÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä.\n");
+            printf("ì˜ëª»ëœ ë©”ë‰´ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš”.\n");
         }
 
-        printf("ÇöÀç Æ®¸® ³ëµå ¼ö: %d\n", countNodes(root));
+        printf("í˜„ì¬ íŠ¸ë¦¬ ë…¸ë“œ ìˆ˜: %d\n", countNodes(root));
     }
 
     return 0;
