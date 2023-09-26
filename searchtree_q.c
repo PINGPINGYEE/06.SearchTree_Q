@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 // 이진 탐색 트리 노드 정의
 typedef struct TreeNode {
     int data;
     struct TreeNode* left, * right;
 } TreeNode;
-
 // 이진 탐색 트리 삽입 함수
 TreeNode* insert(TreeNode* root, int data, int* visitedNodes) {
     if (root == NULL) {
@@ -65,9 +65,9 @@ TreeNode* delete(TreeNode* root, int data, int* visitedNodes) {
     (*visitedNodes)++;
     return root;
 }
-
 // 이진 탐색 트리에서 노드 검색 함수
-TreeNode* searchIterative(TreeNode* root, int data, int* visitedNodes) {
+TreeNode* searchIterative(TreeNode* root, int data) {
+    int cnt = 0;
     while (root != NULL && root->data != data) {
         if (data < root->data) {
             root = root->left;
@@ -75,10 +75,13 @@ TreeNode* searchIterative(TreeNode* root, int data, int* visitedNodes) {
         else {
             root = root->right;
         }
-        (*visitedNodes)++;
+        cnt++;
+
     }
+    printf("방문한 노드 수 : %d\n", cnt + 1);
     return root;
 }
+
 
 // 이진 탐색 트리 중위 순회 함수
 void inorder(TreeNode* root, int* visitedNodes) {
@@ -257,6 +260,7 @@ int main() {
     n3->left = n6;
     n1->left = n2;
     n1->right = n3;
+    n4->right = n7;
 
     // 루트 노드 설정
     TreeNode* root = n1;
@@ -285,18 +289,23 @@ int main() {
             scanf_s("%d", &data);
             root = insert(root, data, &visitedNodes);
             printf("삽입이 완료되었습니다.\n");
+           
             inorder(root, &visitedNodes);
+            printf("방문한 노드 수: %d\n", visitedNodes - 1);
             break;
         case 'd':
             printf("삭제할 값을 입력하세요: ");
             scanf_s("%d", &data);
             root = delete(root, data, &visitedNodes);
             printf("삭제가 완료되었습니다.\n");
+            printf("방문한 노드 수: %d\n", visitedNodes);
             inorder(root, &visitedNodes);
+            
             break;
         case 't':
             printf("중위 순회 결과: ");
             inorder(root, &visitedNodes);
+            printf("방문한 노드 수: %d\n", visitedNodes);
             printf("\n");
             break;
         case 'I':
@@ -304,6 +313,7 @@ int main() {
             scanf_s("%d", &data);
             root = insertIterative(root, data, &visitedNodes);
             printf("삽입이 완료되었습니다.\n");
+            printf("방문한 노드 수: %d\n", visitedNodes - 1);
             inorder(root, &visitedNodes);
             break;
         case 'D':
@@ -311,16 +321,17 @@ int main() {
             scanf_s("%d", &data);
             root = deleteIterative(root, data, &visitedNodes);
             printf("삭제가 완료되었습니다.\n");
+            printf("방문한 노드 수: %d\n", visitedNodes);
             inorder(root, &visitedNodes);
             break;
-        case 'q':
+        case 'c':
             printf("프로그램을 종료합니다.\n");
             return 0;
         default:
             printf("잘못된 메뉴입니다. 다시 입력하세요.\n");
         }
 
-        printf("방문한 노드 수: %d\n", visitedNodes);
+        
     }
 
     return 0;
