@@ -265,12 +265,12 @@ int main() {
     // 루트 노드 설정
     TreeNode* root = n1;
 
-    printf("s : 검색 \ni : 노드 추가\nd : 노드 삭제\nt : 중위 순회\nI : 노드 추가(반복)\nD : 노드 삭제(반복)\nq : 종료\n");
+    printf("s : 검색 \ni : 노드 추가\nd : 노드 삭제\nt : 중위 순회\nI : 노드 추가(반복)\nD : 노드 삭제(반복)\nc : 종료\n");
 
     while (1) {
         visitedNodes = 0; // 방문한 노드 수 초기화
 
-        printf("메뉴를 선택하세요 (s/i/d/t/I/D/q): ");
+        printf("메뉴를 선택하세요 (s/i/d/t/I/D/c): ");
         scanf_s(" %c", &choice);
         switch (choice) {
         case 's':
