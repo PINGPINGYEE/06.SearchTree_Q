@@ -1,135 +1,97 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-// 이진 탐색 트리 노드 정의
-typedef struct TreeNode {
+// 구조체 정의
+typedef struct treeNode {
     int data;
-    struct TreeNode* left, * right;
+    struct treeNode* left, * right;
 } TreeNode;
-// 이진 탐색 트리 삽입 함수
-TreeNode* insert(TreeNode* root, int data, int* visitedNodes) {
-    if (root == NULL) {
-        TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-        newNode->data = data;
-        newNode->left = newNode->right = NULL;
-        (*visitedNodes)++;
-        return newNode;
-    }
 
-    if (data < root->data) {
-        root->left = insert(root->left, data, visitedNodes);
-    }
-    else if (data > root->data) {
-        root->right = insert(root->right, data, visitedNodes);
-    }
-    (*visitedNodes)++;
+// 노드 생성
+TreeNode* newNode(int data) {
+    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
+    node->data = data;
+    node->left = node->right = NULL;
+    return node;
+}
+
+// 재귀적 노드 추가
+TreeNode* insert(TreeNode* root, int data, int* count) {
+    if (root == NULL) return newNode(data);
+
+    (*count)++;
+    if (data < root->data)
+        root->left = insert(root->left, data, count);
+    else if (data > root->data)
+        root->right = insert(root->right, data, count);
+
     return root;
 }
 
-// 이진 탐색 트리에서 노드 삭제 함수
-TreeNode* delete(TreeNode* root, int data, int* visitedNodes) {
-    if (root == NULL) {
-        return root;
+// 반복적 노드 추가
+TreeNode* insertIteratively(TreeNode* root, int data, int* count) {
+    TreeNode* parent = NULL;
+    TreeNode* current = root;
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+
+    while (current != NULL) {
+        (*count)++;
+        parent = current;
+        if (data < current->data)
+            current = current->left;
+        else
+            current = current->right;
     }
 
-    if (data < root->data) {
-        root->left = delete(root->left, data, visitedNodes);
-    }
-    else if (data > root->data) {
-        root->right = delete(root->right, data, visitedNodes);
-    }
+    if (parent == NULL)
+        root = newNode;
+    else if (data < parent->data)
+        parent->left = newNode;
+    else
+        parent->right = newNode;
+
+    return root;
+}
+
+// 노드 삭제를 위한 최소값 찾는 함수
+TreeNode* minValueNode(TreeNode* node) {
+    TreeNode* current = node;
+    while (current && current->left != NULL)
+        current = current->left;
+    return current;
+}
+
+// 재귀적 노드 삭제
+TreeNode* deleteNode(TreeNode* root, int data, int* count) {
+    if (root == NULL) return root;
+
+    (*count)++;
+    if (data < root->data)
+        root->left = deleteNode(root->left, data, count);
+    else if (data > root->data)
+        root->right = deleteNode(root->right, data, count);
     else {
-        // 삭제할 노드를 찾았을 때
         if (root->left == NULL) {
             TreeNode* temp = root->right;
             free(root);
-            (*visitedNodes)++;
             return temp;
         }
         else if (root->right == NULL) {
             TreeNode* temp = root->left;
             free(root);
-            (*visitedNodes)++;
             return temp;
         }
-
-        // 두 자식 노드 모두 있는 경우
-        TreeNode* temp = root->right;
-        while (temp->left != NULL) {
-            temp = temp->left;
-        }
+        TreeNode* temp = minValueNode(root->right);
         root->data = temp->data;
-        root->right = delete(root->right, temp->data, visitedNodes);
+        root->right = deleteNode(root->right, temp->data, count);
     }
-    (*visitedNodes)++;
-    return root;
-}
-// 이진 탐색 트리에서 노드 검색 함수
-TreeNode* searchIterative(TreeNode* root, int data) {
-    int cnt = 0;
-    while (root != NULL && root->data != data) {
-        if (data < root->data) {
-            root = root->left;
-        }
-        else {
-            root = root->right;
-        }
-        cnt++;
-
-    }
-    printf("방문한 노드 수 : %d\n", cnt + 1);
     return root;
 }
 
-
-// 이진 탐색 트리 중위 순회 함수
-void inorder(TreeNode* root, int* visitedNodes) {
-    if (root != NULL) {
-        inorder(root->left, visitedNodes);
-        printf("%d ", root->data);
-        inorder(root->right, visitedNodes);
-        (*visitedNodes)++;
-    }
-}
-
-// 이진 트리 노드 삽입 (반복적 방법)
-TreeNode* insertIterative(TreeNode* root, int data, int* visitedNodes) {
-    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-    newNode->data = data;
-    newNode->left = newNode->right = NULL;
-    (*visitedNodes)++;
-
-    if (root == NULL) {
-        return newNode;
-    }
-
-    TreeNode* current = root;
-    TreeNode* parent = NULL;
-
-    while (current != NULL) {
-        parent = current;
-        if (data < current->data) {
-            current = current->left;
-        }
-        else {
-            current = current->right;
-        }
-        (*visitedNodes)++;
-    }
-
-    if (data < parent->data) {
-        parent->left = newNode;
-    }
-    else {
-        parent->right = newNode;
-    }
-
-    return root;
-}
-
-// 이진 트리 노드 삭제 (반복적 방법)
-TreeNode* deleteIterative(TreeNode* root, int data, int* visitedNodes) {
+// 반복적 노드 삭제
+TreeNode* deleteNodeIteratively(TreeNode* root, int data, int* count) {
     if (root == NULL) {
         return root;
     }
@@ -145,11 +107,12 @@ TreeNode* deleteIterative(TreeNode* root, int data, int* visitedNodes) {
         else {
             current = current->right;
         }
-        (*visitedNodes)++;
+        (*count)++;
     }
 
+    // 삭제할 노드를 찾지 못한 경우
     if (current == NULL) {
-        // 삭제할 노드를 찾지 못한 경우
+        
         return root;
     }
 
@@ -157,8 +120,8 @@ TreeNode* deleteIterative(TreeNode* root, int data, int* visitedNodes) {
         // 삭제할 노드가 리프 노드인 경우
         if (parent == NULL) {
             free(current);
-            (*visitedNodes)++;
-            return NULL; // 루트 노드 삭제
+            (*count)++;
+            return NULL;
         }
 
         if (current == parent->left) {
@@ -169,13 +132,14 @@ TreeNode* deleteIterative(TreeNode* root, int data, int* visitedNodes) {
         }
         free(current);
     }
-
+    // 삭제할 노드가 두 개의 자식 노드를 가진 경우
     else if (current->left != NULL && current->right != NULL) {
-        // 삭제할 노드가 두 개의 자식 노드를 가진 경우
+        
         TreeNode* successor = current->right;
         TreeNode* successorParent = current;
 
         while (successor->left != NULL) {
+            (*count)++;
             successorParent = successor;
             successor = successor->left;
         }
@@ -187,10 +151,12 @@ TreeNode* deleteIterative(TreeNode* root, int data, int* visitedNodes) {
         else {
             successorParent->right = successor->right;
         }
+        (*count)++;
         free(successor);
     }
+    // 삭제할 노드가 하나의 자식 노드만 가진 경우
     else {
-        // 삭제할 노드가 하나의 자식 노드만 가진 경우
+        
         TreeNode* child = (current->left != NULL) ? current->left : current->right;
 
         if (parent == NULL) {
@@ -205,133 +171,126 @@ TreeNode* deleteIterative(TreeNode* root, int data, int* visitedNodes) {
         }
         free(current);
     }
-
+    (*count)++;
     return root;
 }
 
-int countNodes(TreeNode* root) {
-    if (root == NULL) {
-        return 0;
+// 재귀적 중위 순회 함수
+void inorder(TreeNode* root, int* count) {
+  
+    if (root != NULL) {
+        inorder(root->left, count);
+        (*count)++;
+        printf("%d ", root->data);
+        inorder(root->right, count);
     }
-    return 1 + countNodes(root->left) + countNodes(root->right);
 }
 
-TreeNode* createNode(int data) {
-    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-    if (newNode == NULL) {
-        printf("메모리 할당 오류\n");
-        exit(1);
+// 노드 검색 함수
+TreeNode* search(TreeNode* root, int data) {
+    int cnt = 0;
+    while (root != NULL && root->data != data) {
+        if (data < root->data) {
+            root = root->left;
+        }
+        else {
+            root = root->right;
+        }
+        cnt++;
     }
-    newNode->data = data;
-    newNode->left = newNode->right = NULL;
-    return newNode;
+    printf("방문한 노드 수:%d\n", cnt + 1);
+    return root;
 }
 
 int main() {
-    char choice;
-    int data;
-    int visitedNodes; // 방문한 노드 수
+    TreeNode* root = NULL;
+    root = insert(root, 60, &(int){0});
+    root = insert(root, 41, &(int){0});
+    root = insert(root, 74, &(int){0});
+    root = insert(root, 16, &(int){0});
+    root = insert(root, 53, &(int){0});
+    root = insert(root, 65, &(int){0});
+    root = insert(root, 25, &(int){0});
+    root = insert(root, 46, &(int){0});
+    root = insert(root, 55, &(int){0});
+    root = insert(root, 63, &(int){0});
+    root = insert(root, 70, &(int){0});
+    root = insert(root, 42, &(int){0});
+    root = insert(root, 62, &(int){0});
+    root = insert(root, 64, &(int){0});
 
-    TreeNode* n12 = createNode(42);
-    TreeNode* n13 = createNode(62);
-    TreeNode* n14 = createNode(64);
-    TreeNode* n7 = createNode(25);
-    TreeNode* n8 = createNode(46);
-    TreeNode* n9 = createNode(55);
-    TreeNode* n10 = createNode(63);
-    TreeNode* n11 = createNode(70);
-    TreeNode* n4 = createNode(16);
-    TreeNode* n5 = createNode(53);
-    TreeNode* n6 = createNode(65);
-    TreeNode* n2 = createNode(41);
-    TreeNode* n3 = createNode(74);
-    TreeNode* n1 = createNode(60);
-
-    // 노드들을 연결
-    n8->left = n12;
-    n5->left = n8;
-    n5->right = n9;
-    n10->left = n13;
-    n10->right = n14;
-    n6->left = n10;
-    n6->right = n11;
-    n2->left = n4;
-    n2->right = n5;
-    n3->left = n6;
-    n1->left = n2;
-    n1->right = n3;
-    n4->right = n7;
-
-    // 루트 노드 설정
-    TreeNode* root = n1;
-
-    printf("s : 검색 \ni : 노드 추가\nd : 노드 삭제\nt : 중위 순회\nI : 노드 추가(반복)\nD : 노드 삭제(반복)\nc : 종료\n");
+    printf("---------------------------\n");
+    printf(" s : 검색\n i : 노드 추가\n d : 노드 삭제\n t : 중위 순회\n I : 노드 추가(반복)\n D : 노드 삭제(반복)\n c : 종료\n");
+    printf("---------------------------\n\n");
 
     while (1) {
-        visitedNodes = 0; // 방문한 노드 수 초기화
+        
+        printf("메뉴입력:");
+        char menu;
+        scanf_s(" %c", &menu);
+        if (menu == 'C') break;
 
-        printf("메뉴를 선택하세요 (s/i/d/t/I/D/c): ");
-        scanf_s(" %c", &choice);
-        switch (choice) {
+        int value, count = 0;
+        
+
+        switch (menu) {
         case 's':
-            printf("검색할 값을 입력하세요: ");
-            scanf_s("%d", &data);
-            if (searchIterative(root, data, &visitedNodes) != NULL) {
-                printf("노드가 존재합니다.\n");
-            }
-            else {
-                printf("노드가 존재하지 않습니다.\n");
-            }
-            inorder(root, &visitedNodes);
+            printf("값 입력:");
+            scanf_s("%d", &value);
+            if (search(root, value))
+                printf("검색 성공:%d\n", value);
+            else
+                printf("검색 실패:%d\n", value);
+            inorder(root, &count);
+            printf("\n");
             break;
         case 'i':
-            printf("삽입할 값을 입력하세요: ");
-            scanf_s("%d", &data);
-            root = insert(root, data, &visitedNodes);
-            printf("삽입이 완료되었습니다.\n");
-           
-            inorder(root, &visitedNodes);
-            printf("방문한 노드 수: %d\n", visitedNodes - 1);
-            break;
-        case 'd':
-            printf("삭제할 값을 입력하세요: ");
-            scanf_s("%d", &data);
-            root = delete(root, data, &visitedNodes);
-            printf("삭제가 완료되었습니다.\n");
-            printf("방문한 노드 수: %d\n", visitedNodes);
-            inorder(root, &visitedNodes);
-            
-            break;
-        case 't':
-            printf("중위 순회 결과: ");
-            inorder(root, &visitedNodes);
-            printf("방문한 노드 수: %d\n", visitedNodes);
+            printf("값 입력:");
+            scanf_s("%d", &value);
+            root = insert(root, value, &count);
+            printf("방문한 노드 수:%d\n", count);
+            inorder(root, &count);
             printf("\n");
             break;
         case 'I':
-            printf("반복적 방법으로 삽입할 값을 입력하세요: ");
-            scanf_s("%d", &data);
-            root = insertIterative(root, data, &visitedNodes);
-            printf("삽입이 완료되었습니다.\n");
-            printf("방문한 노드 수: %d\n", visitedNodes - 1);
-            inorder(root, &visitedNodes);
+            printf("값 입력:");
+            scanf_s("%d", &value);
+            root = insertIteratively(root, value, &count);
+            printf("방문한 노드 수:%d\n", count);
+            inorder(root, &count);
+            printf("\n");
+            break;
+        case 'd':
+            printf("값 입력:");
+            scanf_s("%d", &value);
+            root = deleteNode(root, value, &count);
+            printf("방문한 노드 수:%d\n", count);
+            inorder(root, &count);
+            printf("\n");
             break;
         case 'D':
-            printf("반복적 방법으로 삭제할 값을 입력하세요: ");
-            scanf_s("%d", &data);
-            root = deleteIterative(root, data, &visitedNodes);
-            printf("삭제가 완료되었습니다.\n");
-            printf("방문한 노드 수: %d\n", visitedNodes);
-            inorder(root, &visitedNodes);
+            printf("값 입력:");
+            scanf_s("%d", &value);
+            root = deleteNodeIteratively(root, value, &count);
+            printf("방문한 노드 수:%d\n", count);
+            inorder(root, &count);
+            printf("\n");
+            break;
+        case 't':
+            inorder(root, &count);
+            printf("\n방문한 노드 수:%d\n", count);
+            printf("\n");
             break;
         case 'c':
             printf("프로그램을 종료합니다.\n");
             return 0;
         default:
-            printf("잘못된 메뉴입니다. 다시 입력하세요.\n");
+            printf("잘못된 메뉴 입력\n");
+            continue;
         }
-
         
+        
+        printf("\n");
     }
 
     return 0;
